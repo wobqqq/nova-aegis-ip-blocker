@@ -4,7 +4,7 @@ Guidance for coding agents working in this repository.
 
 ## What this is
 
-**IP Blocker** (`wobqqq/nova-aegis-ip-blocker`) is a module of Aegis, the security suite for Laravel Nova (Laravel 12, PHP 8.2+). It refuses every request from the IP addresses and subnets (IPv4 and IPv6, CIDR notation) the administrator lists, on the site and in Nova, answering 403 with the page the administrator chose. It is the Laravel port of the October CMS module `Wobqqq.FortifyIpBlocker`.
+**IP Blocker** (`wobqqq/nova-aegis-ip-blocker`) is a module of Aegis, the security suite for Laravel Nova (Laravel 12 or 13, PHP 8.4+). It refuses every request from the IP addresses and subnets (IPv4 and IPv6, CIDR notation) the administrator lists, on the site and in Nova, answering 403 with the page the administrator chose. It is the Laravel port of the October CMS module `Wobqqq.FortifyIpBlocker`.
 
 It requires the core [`wobqqq/nova-aegis`](https://github.com/wobqqq/nova-aegis): the settings are a section of the Aegis page (`ip-blocker`), stored and cached by the core, and the module adds its line to the core's dashboard and one check.
 

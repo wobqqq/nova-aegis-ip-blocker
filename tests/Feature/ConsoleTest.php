@@ -3,6 +3,7 @@
 declare(strict_types=1);
 
 use Illuminate\Support\Facades\Artisan;
+use Illuminate\Validation\ValidationException;
 use Wobqqq\Aegis\Aegis;
 use Wobqqq\Aegis\Settings\AegisSetting;
 use Wobqqq\Aegis\Settings\SettingsRepository;
@@ -14,7 +15,7 @@ use Wobqqq\AegisIpBlocker\IpBlockerModule;
  */
 function listed(): array
 {
-    $rows = Aegis::settings(IpBlockerModule::KEY)['ips'];
+    $rows = Aegis::settings(IpBlockerModule::KEY)['ips'] ?? null;
 
     return array_values(array_map(static fn (mixed $row): string => is_array($row) && is_string($row['ip'] ?? null) ? $row['ip'] : '', is_array($rows) ? $rows : []));
 }
@@ -57,7 +58,7 @@ it('recovers a list that blocks the console address and drops broken rows', func
     resolve(SettingsRepository::class)->flush();
 
     expect(Artisan::call('aegis:ip-blocker:remove-ip', ['ip' => '127.0.0.1']))->toBe(0)
-        ->and(Aegis::settings(IpBlockerModule::KEY)['ips'])->toBe([['ip' => '127.0.0.0/8', 'note' => 'Local'], ['ip' => '203.0.113.7', 'note' => null]]);
+        ->and(Aegis::settings(IpBlockerModule::KEY)['ips'] ?? null)->toBe([['ip' => '127.0.0.0/8', 'note' => 'Local'], ['ip' => '203.0.113.7', 'note' => null]]);
 });
 
 it('turns the module off and keeps the list', function (): void {
@@ -75,7 +76,7 @@ it('keeps the lock-out rule for the next save from a request', function (): void
     Artisan::call('aegis:ip-blocker:disable');
 
     block(['127.0.0.1']);
-})->throws(Illuminate\Validation\ValidationException::class);
+})->throws(ValidationException::class);
 
 it('removes nothing for what is not an address', function (): void {
     block(['203.0.113.7']);

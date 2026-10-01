@@ -3,6 +3,7 @@
 declare(strict_types=1);
 
 use Illuminate\Http\Request;
+use Wobqqq\Aegis\Checks\CheckResult;
 use Wobqqq\Aegis\Enums\Status;
 use Wobqqq\AegisIpBlocker\Checks\ClientIpCheck;
 
@@ -15,7 +16,7 @@ afterEach(function (): void {
 /**
  * @param array<string, string> $server
  */
-function checkFor(array $server): Wobqqq\Aegis\Checks\CheckResult
+function checkFor(array $server): CheckResult
 {
     app()->instance('request', Request::create('/', 'GET', server: $server));
 

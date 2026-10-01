@@ -9,9 +9,11 @@ use Illuminate\Support\Facades\Gate;
 use Illuminate\Support\Facades\Route;
 use Illuminate\Support\Facades\Schema;
 use Illuminate\Support\Facades\View;
+use Inertia\ServiceProvider;
 use Laravel\Nova\Nova;
 use Laravel\Nova\NovaCoreServiceProvider;
 use Orchestra\Testbench\TestCase as BaseTestCase;
+use Override;
 use ReflectionClass;
 use Wobqqq\Aegis\AegisServiceProvider;
 use Wobqqq\Aegis\Nova\AegisTool;
@@ -20,6 +22,7 @@ use Wobqqq\AegisIpBlocker\Tests\Fixtures\User;
 
 abstract class TestCase extends BaseTestCase
 {
+    #[Override]
     protected function setUp(): void
     {
         parent::setUp();
@@ -44,11 +47,13 @@ abstract class TestCase extends BaseTestCase
     /**
      * @return list<class-string>
      */
+    #[Override]
     protected function getPackageProviders($app): array
     {
-        return [\Inertia\ServiceProvider::class, NovaCoreServiceProvider::class, AegisServiceProvider::class, IpBlockerServiceProvider::class];
+        return [ServiceProvider::class, NovaCoreServiceProvider::class, AegisServiceProvider::class, IpBlockerServiceProvider::class];
     }
 
+    #[Override]
     protected function defineEnvironment($app): void
     {
         $app['config']->set('auth.providers.users.model', User::class);
@@ -56,11 +61,13 @@ abstract class TestCase extends BaseTestCase
         $app['config']->set('aegis.audit.schedule', false);
     }
 
+    #[Override]
     protected function defineDatabaseMigrations(): void
     {
-        $this->loadMigrationsFrom(dirname((string)(new ReflectionClass(AegisServiceProvider::class))->getFileName(), 2) . '/database/migrations');
+        $this->loadMigrationsFrom(dirname((string)new ReflectionClass(AegisServiceProvider::class)->getFileName(), 2) . '/database/migrations');
     }
 
+    #[Override]
     protected function defineRoutes($router): void
     {
         Route::middleware('web')->get('/', static fn (): string => 'Welcome');

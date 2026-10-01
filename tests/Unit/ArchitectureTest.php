@@ -6,6 +6,8 @@ use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Log;
 use Wobqqq\Aegis\Settings\AegisSetting;
 use Wobqqq\Aegis\Settings\SettingsRepository;
+use Wobqqq\AegisIpBlocker\BlockList;
+use Wobqqq\AegisIpBlocker\IpBlockerSettings;
 
 arch('every file declares strict types')
     ->expect('Wobqqq\AegisIpBlocker')
@@ -21,7 +23,7 @@ arch('classes are final')
     ->toBeFinal();
 
 arch('value objects are immutable')
-    ->expect([Wobqqq\AegisIpBlocker\BlockList::class, Wobqqq\AegisIpBlocker\IpBlockerSettings::class])
+    ->expect([BlockList::class, IpBlockerSettings::class])
     ->toBeReadonly();
 
 arch('the module uses the core through its public API only')

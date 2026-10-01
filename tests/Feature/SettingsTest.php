@@ -38,7 +38,7 @@ it('saves a list from the Aegis page', function (): void {
         ->assertOk()
         ->assertJsonPath('values.ips.0.ip', '203.0.113.7');
 
-    expect(Aegis::settings(IpBlockerModule::KEY)['enabled'])->toBeTrue();
+    expect(Aegis::settings(IpBlockerModule::KEY)['enabled'] ?? null)->toBeTrue();
 });
 
 it('refuses a list that blocks the administrator saving it', function (string $entry): void {
@@ -47,7 +47,7 @@ it('refuses a list that blocks the administrator saving it', function (string $e
         ->assertUnprocessable()
         ->assertJsonValidationErrors(['ips' => 'The list blocks your own address (192.0.2.10).']);
 
-    expect(Aegis::settings(IpBlockerModule::KEY)['ips'])->toBe([]);
+    expect(Aegis::settings(IpBlockerModule::KEY)['ips'] ?? null)->toBe([]);
 })->with([
     'the address' => ['192.0.2.10'],
     'a subnet' => ['192.0.2.0/24'],
@@ -74,8 +74,8 @@ it('refuses invalid values', function (array $values, string $error): void {
 
     try {
         Aegis::save(IpBlockerModule::KEY, $values + section([]));
-    } catch (ValidationException $e) {
-        $errors = $e->errors();
+    } catch (ValidationException $validationException) {
+        $errors = $validationException->errors();
     }
 
     expect($errors)->toHaveKey($error);

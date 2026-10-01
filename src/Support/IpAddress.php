@@ -9,7 +9,7 @@ namespace Wobqqq\AegisIpBlocker\Support;
  */
 final class IpAddress
 {
-    private const MAPPED_PREFIX = "\0\0\0\0\0\0\0\0\0\0\xff\xff";
+    private const string MAPPED_PREFIX = "\0\0\0\0\0\0\0\0\0\0\xff\xff";
 
     public static function normalize(?string $ip): ?string
     {
@@ -37,18 +37,21 @@ final class IpAddress
     {
         $value = trim((string)$value);
 
-        if (!str_contains($value, '/')) {
+        $slash = strpos($value, '/');
+
+        if ($slash === false) {
             return self::normalize($value);
         }
 
-        [$address, $prefix] = explode('/', $value, 2);
+        $address = substr($value, 0, $slash);
+        $bits = substr($value, $slash + 1);
         $ip = self::normalize($address);
 
-        if ($ip === null || preg_match('/^\d{1,3}$/', $prefix) !== 1) {
+        if ($ip === null || preg_match('/^\d{1,3}$/', $bits) !== 1) {
             return null;
         }
 
-        $prefix = (int)$prefix;
+        $prefix = (int)$bits;
 
         if (str_contains(trim($address), ':') && !str_contains($ip, ':')) {
             // An IPv4-mapped subnet keeps the bits of its IPv4 part.

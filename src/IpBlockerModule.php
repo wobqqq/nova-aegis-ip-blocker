@@ -4,35 +4,41 @@ declare(strict_types=1);
 
 namespace Wobqqq\AegisIpBlocker;
 
+use Override;
 use Wobqqq\Aegis\Checks\CheckResult;
 use Wobqqq\Aegis\Contracts\Module;
 use Wobqqq\Aegis\Settings\Field;
 use Wobqqq\AegisIpBlocker\Rules\DoesNotBlockAdministrator;
 use Wobqqq\AegisIpBlocker\Rules\IpOrSubnet;
+use Wobqqq\AegisIpBlocker\Support\Message;
 
 final readonly class IpBlockerModule implements Module
 {
-    public const KEY = 'ip-blocker';
+    public const string KEY = 'ip-blocker';
 
     public function __construct(private IpBlocker $blocker)
     {
     }
 
+    #[Override]
     public function key(): string
     {
         return self::KEY;
     }
 
+    #[Override]
     public function label(): string
     {
-        return (string)__('aegis-ip-blocker::ip-blocker.label');
+        return Message::get('aegis-ip-blocker::ip-blocker.label');
     }
 
+    #[Override]
     public function description(): string
     {
-        return (string)__('aegis-ip-blocker::ip-blocker.description');
+        return Message::get('aegis-ip-blocker::ip-blocker.description');
     }
 
+    #[Override]
     public function defaults(): array
     {
         return [
@@ -42,6 +48,7 @@ final readonly class IpBlockerModule implements Module
         ];
     }
 
+    #[Override]
     public function rules(): array
     {
         return [
@@ -54,10 +61,14 @@ final readonly class IpBlockerModule implements Module
         ];
     }
 
+    /**
+     * @return list<Field>
+     */
+    #[Override]
     public function fields(): array
     {
-        $label = static fn (string $name): string => (string)__('aegis-ip-blocker::ip-blocker.fields.' . $name);
-        $help = static fn (string $name): string => (string)__('aegis-ip-blocker::ip-blocker.help.' . $name);
+        $label = static fn (string $name): string => Message::get('aegis-ip-blocker::ip-blocker.fields.' . $name);
+        $help = static fn (string $name): string => Message::get('aegis-ip-blocker::ip-blocker.help.' . $name);
 
         return [
             Field::toggle('enabled', $label('enabled'), $help('enabled')),
@@ -69,13 +80,14 @@ final readonly class IpBlockerModule implements Module
         ];
     }
 
+    #[Override]
     public function status(array $values): CheckResult
     {
         $settings = IpBlockerSettings::fromArray($values);
         $label = $this->label();
 
         if (!$settings->enabled) {
-            return CheckResult::warn(self::KEY, $label, (string)__('aegis-ip-blocker::ip-blocker.status.off'));
+            return CheckResult::warn(self::KEY, $label, Message::get('aegis-ip-blocker::ip-blocker.status.off'));
         }
 
         return CheckResult::pass(self::KEY, $label, trans_choice('aegis-ip-blocker::ip-blocker.status.on', $settings->blockList->count()));

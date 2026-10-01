@@ -11,11 +11,11 @@ use Wobqqq\Aegis\Support\Values;
  */
 final readonly class IpBlockerSettings
 {
-    public const DEFAULT_VIEW = 'aegis-ip-blocker::blocked';
+    public const string DEFAULT_VIEW = 'aegis-ip-blocker::blocked';
 
-    public const MAX_ENTRIES = 500;
+    public const int MAX_ENTRIES = 500;
 
-    public const VIEW_PATTERN = '/^[A-Za-z0-9_.-]{1,100}(?:::[A-Za-z0-9_.-]{1,100})?$/';
+    public const string VIEW_PATTERN = '/^[A-Za-z0-9_.-]{1,100}(?:::[A-Za-z0-9_.-]{1,100})?$/';
 
     public function __construct(public bool $enabled, public string $view, public BlockList $blockList)
     {
