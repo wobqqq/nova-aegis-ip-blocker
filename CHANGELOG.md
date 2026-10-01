@@ -4,9 +4,13 @@ All notable changes are documented here. The format follows [Keep a Changelog](h
 
 ## [Unreleased]
 
+## [1.0.1] - 2026-10-01
+
 ### Changed
 
 - Development and CI run on a test double of Nova (`stubs/nova`, not shipped) and need no Nova license; `make test.nova` runs the PHP suite on the real Nova. Nothing changes for applications.
+- The README splits the installation into numbered steps.
+- The Dependabot config no longer reads the Nova registry.
 
 ## [1.0.0] - 2026-10-01
 
@@ -20,5 +24,6 @@ All notable changes are documented here. The format follows [Keep a Changelog](h
 - `aegis:ip-blocker:remove-ip {ip}` and `aegis:ip-blocker:disable` console commands to recover a locked-out administrator.
 - Requires Aegis 1.1 or newer.
 
-[Unreleased]: https://github.com/wobqqq/nova-aegis-ip-blocker/compare/v1.0.0...HEAD
+[Unreleased]: https://github.com/wobqqq/nova-aegis-ip-blocker/compare/v1.0.1...HEAD
+[1.0.1]: https://github.com/wobqqq/nova-aegis-ip-blocker/compare/v1.0.0...v1.0.1
 [1.0.0]: https://github.com/wobqqq/nova-aegis-ip-blocker/releases/tag/v1.0.0
