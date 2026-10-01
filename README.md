@@ -1,5 +1,6 @@
 # Aegis IP Blocker
 
+[![CI](https://github.com/wobqqq/nova-aegis-ip-blocker/actions/workflows/ci.yml/badge.svg)](https://github.com/wobqqq/nova-aegis-ip-blocker/actions/workflows/ci.yml)
 [![Packagist](https://img.shields.io/packagist/v/wobqqq/nova-aegis-ip-blocker)](https://packagist.org/packages/wobqqq/nova-aegis-ip-blocker)
 [![PHP](https://img.shields.io/badge/PHP-8.2%2B-777bb4)](https://github.com/wobqqq/nova-aegis-ip-blocker/blob/main/composer.json)
 [![PHPStan](https://img.shields.io/badge/PHPStan-level%20max-brightgreen)](https://github.com/wobqqq/nova-aegis-ip-blocker/blob/main/phpstan.neon.dist)
@@ -98,3 +99,5 @@ make code.check     # composer validate/audit, php -l, PHP CS Fixer, Rector, PHP
 make test.coverage  # Pest with coverage (90 % minimum)
 make ready          # everything above
 ```
+
+GitHub Actions runs the same checks on every pull request, with the core checked out next to the module. It needs the repository secrets `NOVA_USERNAME` and `NOVA_LICENSE_KEY`, and `AEGIS_CORE_TOKEN` (a token that can read `wobqqq/nova-aegis`) while the core repository is private.
