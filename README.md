@@ -28,14 +28,29 @@
 
 ## 📥 Installation
 
+### 1. Install the package
+
 ```bash
 composer require wobqqq/nova-aegis-ip-blocker
+```
+
+The service provider is discovered automatically.
+
+### 2. Run the migrations
+
+```bash
 php artisan migrate
 ```
 
-The service provider is discovered automatically; `migrate` creates the Aegis settings table if the core is new to the application. If Aegis is not set up yet, register its tool and the `viewAegis` gate as its [README](https://github.com/wobqqq/nova-aegis#-installation) describes.
+This creates the Aegis settings table if the core is new to the application; the module adds no table of its own.
 
-Then open **Aegis → Settings → IP Blocker**, list the addresses, switch **Enable IP Blocker** on and save.
+### 3. Set up Aegis (once per application)
+
+If Aegis is new to the application, register its tool and define the `viewAegis` gate as the [Aegis README](https://github.com/wobqqq/nova-aegis#-installation) describes. Skip this step if you already use another Aegis module.
+
+### 4. Turn it on in Nova
+
+Open **Aegis → Settings → IP Blocker** in Nova, list the addresses or subnets to block, switch **Enable IP Blocker** on and save. A list that would block your own address is refused.
 
 ## ⚙️ Configuration
 
