@@ -1,0 +1,83 @@
+<?php
+
+declare(strict_types=1);
+
+namespace Wobqqq\AegisIpBlocker;
+
+use Wobqqq\Aegis\Checks\CheckResult;
+use Wobqqq\Aegis\Contracts\Module;
+use Wobqqq\Aegis\Settings\Field;
+use Wobqqq\AegisIpBlocker\Rules\DoesNotBlockAdministrator;
+use Wobqqq\AegisIpBlocker\Rules\IpOrSubnet;
+
+final readonly class IpBlockerModule implements Module
+{
+    public const KEY = 'ip-blocker';
+
+    public function __construct(private IpBlocker $blocker)
+    {
+    }
+
+    public function key(): string
+    {
+        return self::KEY;
+    }
+
+    public function label(): string
+    {
+        return (string)__('aegis-ip-blocker::ip-blocker.label');
+    }
+
+    public function description(): string
+    {
+        return (string)__('aegis-ip-blocker::ip-blocker.description');
+    }
+
+    public function defaults(): array
+    {
+        return [
+            'enabled' => false,
+            'view' => IpBlockerSettings::DEFAULT_VIEW,
+            'ips' => [],
+        ];
+    }
+
+    public function rules(): array
+    {
+        return [
+            'enabled' => ['required', 'boolean'],
+            'view' => ['required', 'string', 'max:100', 'regex:' . IpBlockerSettings::VIEW_PATTERN],
+            'ips' => ['present', 'array', 'max:' . IpBlockerSettings::MAX_ENTRIES, new DoesNotBlockAdministrator($this->blocker->administratorIp())],
+            'ips.*' => ['array:ip,note'],
+            'ips.*.ip' => ['nullable', 'string', 'max:100', new IpOrSubnet()],
+            'ips.*.note' => ['nullable', 'string', 'max:255'],
+        ];
+    }
+
+    public function fields(): array
+    {
+        $label = static fn (string $name): string => (string)__('aegis-ip-blocker::ip-blocker.fields.' . $name);
+        $help = static fn (string $name): string => (string)__('aegis-ip-blocker::ip-blocker.help.' . $name);
+
+        return [
+            Field::toggle('enabled', $label('enabled'), $help('enabled')),
+            Field::text('view', $label('view'), $help('view'), IpBlockerSettings::DEFAULT_VIEW),
+            Field::table('ips', $label('ips'), [
+                Field::text('ip', $label('ip'), placeholder: '203.0.113.7 / 198.51.100.0/24 / 2001:db8::/32'),
+                Field::text('note', $label('note'), placeholder: $label('note_placeholder')),
+            ], $help('ips')),
+        ];
+    }
+
+    public function status(array $values): CheckResult
+    {
+        $settings = IpBlockerSettings::fromArray($values);
+        $label = $this->label();
+
+        if (!$settings->enabled) {
+            return CheckResult::warn(self::KEY, $label, (string)__('aegis-ip-blocker::ip-blocker.status.off'));
+        }
+
+        return CheckResult::pass(self::KEY, $label, trans_choice('aegis-ip-blocker::ip-blocker.status.on', $settings->blockList->count()));
+    }
+}
