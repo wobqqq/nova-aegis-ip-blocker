@@ -15,7 +15,7 @@ use Wobqqq\AegisIpBlocker\IpBlockerSettings;
 
 final readonly class BlockListedIps
 {
-    public const ALIAS = 'aegis.ip-blocker';
+    public const string ALIAS = 'aegis.ip-blocker';
 
     public function __construct(private IpBlocker $blocker, private ViewFactory $views)
     {

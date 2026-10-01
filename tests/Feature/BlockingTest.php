@@ -4,9 +4,11 @@ declare(strict_types=1);
 
 use Illuminate\Contracts\View\Factory as ViewFactory;
 use Illuminate\Http\Middleware\TrustProxies;
+use Mockery\MockInterface;
 use Wobqqq\Aegis\Aegis;
 use Wobqqq\Aegis\Checks\CheckResult;
 use Wobqqq\Aegis\Contracts\Module;
+use Wobqqq\AegisIpBlocker\IpBlocker;
 use Wobqqq\AegisIpBlocker\IpBlockerModule;
 
 afterEach(function (): void {
@@ -71,7 +73,7 @@ it('shows the page the administrator chose, escaped, or the default one', functi
 it('still refuses when no page can be drawn', function (): void {
     block(['203.0.113.7']);
 
-    /** @var Mockery\MockInterface&ViewFactory $views */
+    /** @var MockInterface&ViewFactory $views */
     $views = Mockery::mock(ViewFactory::class);
     $views->allows('exists')->andReturnFalse();
     app()->instance(ViewFactory::class, $views);
@@ -102,42 +104,49 @@ it('lets the request through when its settings cannot be read', function (): voi
     block(['203.0.113.7']);
 
     Aegis::module(new class () implements Module {
+        #[Override]
         public function key(): string
         {
             return IpBlockerModule::KEY;
         }
 
+        #[Override]
         public function label(): string
         {
             return 'Broken';
         }
 
+        #[Override]
         public function description(): string
         {
             return '';
         }
 
+        #[Override]
         public function defaults(): array
         {
             throw new RuntimeException('Broken module');
         }
 
+        #[Override]
         public function rules(): array
         {
             return [];
         }
 
+        #[Override]
         public function fields(): array
         {
             return [];
         }
 
+        #[Override]
         public function status(array $values): ?CheckResult
         {
             return null;
         }
     });
-    resolve(Wobqqq\AegisIpBlocker\IpBlocker::class)->forget();
+    resolve(IpBlocker::class)->forget();
 
     from('203.0.113.7')->get('/')->assertOk();
 });

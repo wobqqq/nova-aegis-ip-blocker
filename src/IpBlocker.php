@@ -36,8 +36,8 @@ final class IpBlocker
     {
         try {
             $settings = $this->settings();
-        } catch (Throwable $e) {
-            report($e);
+        } catch (Throwable $throwable) {
+            report($throwable);
 
             return false;
         }

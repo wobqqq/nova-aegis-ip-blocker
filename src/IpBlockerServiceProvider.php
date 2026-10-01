@@ -7,6 +7,7 @@ namespace Wobqqq\AegisIpBlocker;
 use Illuminate\Contracts\Events\Dispatcher;
 use Illuminate\Routing\Router;
 use Illuminate\Support\ServiceProvider;
+use Override;
 use Wobqqq\Aegis\Aegis;
 use Wobqqq\Aegis\Events\SettingsSaved;
 use Wobqqq\AegisIpBlocker\Checks\ClientIpCheck;
@@ -16,6 +17,7 @@ use Wobqqq\AegisIpBlocker\Http\Middleware\BlockListedIps;
 
 final class IpBlockerServiceProvider extends ServiceProvider
 {
+    #[Override]
     public function register(): void
     {
         $this->app->singleton(IpBlocker::class);

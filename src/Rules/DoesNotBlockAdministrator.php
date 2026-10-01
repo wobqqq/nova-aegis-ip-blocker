@@ -6,6 +6,7 @@ namespace Wobqqq\AegisIpBlocker\Rules;
 
 use Closure;
 use Illuminate\Contracts\Validation\ValidationRule;
+use Override;
 use Wobqqq\AegisIpBlocker\BlockList;
 use Wobqqq\AegisIpBlocker\IpBlockerSettings;
 
@@ -18,6 +19,7 @@ final readonly class DoesNotBlockAdministrator implements ValidationRule
     {
     }
 
+    #[Override]
     public function validate(string $attribute, mixed $value, Closure $fail): void
     {
         if ($this->administratorIp === null) {

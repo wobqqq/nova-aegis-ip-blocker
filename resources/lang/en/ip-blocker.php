@@ -29,8 +29,8 @@ return [
     'checks' => [
         'client_ip' => [
             'label' => 'Visitor IP address',
-            'pass' => 'The visitor\'s address comes from the connection or a trusted proxy.',
-            'untrusted' => 'Requests arrive with :headers from a proxy that is not trusted, so every visitor has the proxy\'s address. Configure the trusted proxies before blocking addresses.',
+            'pass' => "The visitor's address comes from the connection or a trusted proxy.",
+            'untrusted' => "Requests arrive with :headers from a proxy that is not trusted, so every visitor has the proxy's address. Configure the trusted proxies before blocking addresses.",
         ],
     ],
 
