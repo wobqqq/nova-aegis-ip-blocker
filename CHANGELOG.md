@@ -4,6 +4,8 @@ All notable changes are documented here. The format follows [Keep a Changelog](h
 
 ## [Unreleased]
 
+## [1.1.0] - 2026-10-01
+
 ### Added
 
 - Laravel 13 support; CI runs the suite on Laravel 12 and 13.
@@ -34,6 +36,7 @@ All notable changes are documented here. The format follows [Keep a Changelog](h
 - `aegis:ip-blocker:remove-ip {ip}` and `aegis:ip-blocker:disable` console commands to recover a locked-out administrator.
 - Requires Aegis 1.1 or newer.
 
-[Unreleased]: https://github.com/wobqqq/nova-aegis-ip-blocker/compare/v1.0.1...HEAD
+[Unreleased]: https://github.com/wobqqq/nova-aegis-ip-blocker/compare/v1.1.0...HEAD
+[1.1.0]: https://github.com/wobqqq/nova-aegis-ip-blocker/compare/v1.0.1...v1.1.0
 [1.0.1]: https://github.com/wobqqq/nova-aegis-ip-blocker/compare/v1.0.0...v1.0.1
 [1.0.0]: https://github.com/wobqqq/nova-aegis-ip-blocker/releases/tag/v1.0.0
