@@ -90,7 +90,7 @@ Please report a vulnerability privately, as described in [SECURITY.md](https://g
 
 ## 🛠️ Development
 
-The toolchain runs in Docker, the host needs nothing but `docker` and `make`. Until the core is on Packagist it is read from a sibling checkout, `../nova-aegis` (a Composer path repository), so the container mounts the parent directory. Nova is a licensed package: put your credentials in `auth.json` (gitignored) or run `composer config http-basic.nova.laravel.com <email> <license-key>`.
+The toolchain runs in Docker, the host needs nothing but `docker` and `make`. Until the core is on Packagist it is read from a sibling checkout, `../nova-aegis` (a Composer path repository), so the container mounts the parent directory. No Nova license is needed: development and CI run on a test double of Nova in `stubs/nova` (installed as `laravel/nova` from a path repository, never shipped). Applications still install the real Nova.
 
 ```bash
 make install        # composer install
@@ -98,6 +98,9 @@ make code.fix       # composer normalize, Rector, PHP CS Fixer
 make code.check     # composer validate/audit, php -l, PHP CS Fixer, Rector, PHPStan (level max)
 make test.coverage  # Pest with coverage (90 % minimum)
 make ready          # everything above
+make test.nova      # optional: the PHP suite on the real Nova
 ```
 
-GitHub Actions runs the same checks on every pull request, with the core checked out next to the module. It needs the repository secrets `NOVA_USERNAME` and `NOVA_LICENSE_KEY`, and `AEGIS_CORE_TOKEN` (a token that can read `wobqqq/nova-aegis`) while the core repository is private.
+`make test.nova` copies the repository to a temporary directory, installs the real `laravel/nova` from nova.laravel.com there and runs Pest; it needs your own Nova license in `auth.json` (gitignored), and `NOVA_VERSION=5.9.3 make test.nova` picks a release your license may download. The working copy, its `vendor/` and `composer.lock` are left untouched.
+
+GitHub Actions runs the same checks on every pull request, with the core checked out next to the module. It needs no Nova license, only the repository secret `AEGIS_CORE_TOKEN` (a token that can read `wobqqq/nova-aegis`) while the core repository is private.

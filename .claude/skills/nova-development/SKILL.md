@@ -12,7 +12,7 @@ metadata:
 
 # Nova and Laravel integration (this module)
 
-The module has no Nova tool or Vue of its own: the Aegis core draws its section, and the module protects the routes. Check the sources in `vendor/laravel/nova` and `vendor/wobqqq/nova-aegis` for version-specific APIs before using one.
+The module has no Nova tool or Vue of its own: the Aegis core draws its section, and the module protects the routes. `vendor/laravel/nova` here is the test double in `stubs/nova`, not Nova: check a version-specific API in a real Nova install, and the core's API in `vendor/wobqqq/nova-aegis`. A Nova class or method the double lacks is added in the core's `stubs/nova` first (see `package-testing`).
 
 ## The settings section
 
