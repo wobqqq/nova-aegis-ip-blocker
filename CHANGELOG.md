@@ -4,6 +4,8 @@ All notable changes are documented here. The format follows [Keep a Changelog](h
 
 ## [Unreleased]
 
+## [1.0.0] - 2026-10-01
+
 ### Added
 
 - The IP Blocker section on the Aegis settings page: on/off, the page shown to a blocked visitor and the list of blocked addresses and subnets (IPv4, IPv6, CIDR), off by default.
@@ -12,3 +14,7 @@ All notable changes are documented here. The format follows [Keep a Changelog](h
 - A list that covers the address of the administrator saving it, by address or by subnet, is refused.
 - The module's line on the Aegis dashboard and the *Visitor IP address* check, which warns when requests come through a proxy that is not trusted.
 - `aegis:ip-blocker:remove-ip {ip}` and `aegis:ip-blocker:disable` console commands to recover a locked-out administrator.
+- Requires Aegis 1.1 or newer.
+
+[Unreleased]: https://github.com/wobqqq/nova-aegis-ip-blocker/compare/v1.0.0...HEAD
+[1.0.0]: https://github.com/wobqqq/nova-aegis-ip-blocker/releases/tag/v1.0.0
