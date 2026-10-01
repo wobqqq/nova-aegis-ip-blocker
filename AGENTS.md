@@ -25,7 +25,7 @@ make ready          # all of the above
 
 `make ready` must pass. PHPStan runs at `level: max` with strict rules and **no baseline**: fix the type, never add an ignore. Advisories from `composer audit` are fixed by updating the package, never ignored. The module has no Vue of its own: the core draws its settings form from `fields()`.
 
-Installing Nova needs a license: `auth.json` (gitignored and export-ignored) holds the credentials. Never read, print or commit it.
+No Nova license is needed: `laravel/nova` resolves to the test double in `stubs/nova` (see *Tests*). `make test.nova` runs the PHP suite on the real Nova and is the only command that needs a license, read from `auth.json` (gitignored and export-ignored). Never read, print or commit it.
 
 ## How the code is laid out
 
@@ -42,6 +42,7 @@ Installing Nova needs a license: `auth.json` (gitignored and export-ignored) hol
 | `src/Checks/ClientIpCheck.php` | Warns when forwarding headers arrive from a proxy that is not trusted. |
 | `src/Console/` | `aegis:ip-blocker:remove-ip` and `aegis:ip-blocker:disable`, the recovery path. |
 | `resources/lang/en/ip-blocker.php`, `resources/views/blocked.blade.php` | Every string (`aegis-ip-blocker::ip-blocker.*`) and the default 403 page. |
+| `stubs/nova/` | The Nova test double the suite and PHPStan run on (export-ignored), a copy of the core's. |
 
 ### How the module uses the core
 
@@ -88,7 +89,9 @@ Recovery from the console, for an administrator who locked themselves out:
 
 ## Tests
 
-Pest 4 on Orchestra Testbench 10 with the real `laravel/nova` and the Aegis core (SQLite in memory). Read the `package-testing` skill.
+Pest 4 on Orchestra Testbench 10 with the Aegis core (SQLite in memory). Read the `package-testing` skill.
+
+`laravel/nova` is the test double in `stubs/nova`: a path repository (`"versions": {"laravel/nova": "5.99.0"}`, symlinked) declared in `composer.json`, so `make install`, CI and PHPStan need no license; the `require` stays `laravel/nova: ^5.0`, and applications get the real Nova because a dependency's repositories are ignored. It is a verbatim copy of the core's `stubs/nova`: never change it here. When the module needs a Nova API the double lacks, add it in the core first (with the real signature) and copy the directory back unchanged. `make test.nova` checks the suite on the real Nova when you have a license.
 
 ## Git workflow
 
