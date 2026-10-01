@@ -23,7 +23,7 @@
 - PHP 8.2 or higher
 - Laravel 12
 - Laravel Nova 5
-- [Aegis](https://github.com/wobqqq/nova-aegis) (installed with the module)
+- [Aegis](https://github.com/wobqqq/nova-aegis) 1.1 or newer (installed with the module)
 
 ## 📥 Installation
 

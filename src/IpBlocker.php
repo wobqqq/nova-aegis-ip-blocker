@@ -7,7 +7,6 @@ namespace Wobqqq\AegisIpBlocker;
 use Illuminate\Contracts\Foundation\Application;
 use Throwable;
 use Wobqqq\Aegis\Aegis;
-use Wobqqq\Aegis\Settings\SettingsRepository;
 use Wobqqq\AegisIpBlocker\Support\IpAddress;
 
 final class IpBlocker
@@ -123,7 +122,7 @@ final class IpBlocker
         $this->recovering = true;
 
         try {
-            $this->app->make(SettingsRepository::class)->save(IpBlockerModule::KEY, $values);
+            Aegis::save(IpBlockerModule::KEY, $values);
         } finally {
             $this->recovering = false;
         }

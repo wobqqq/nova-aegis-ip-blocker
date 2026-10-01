@@ -4,7 +4,6 @@ declare(strict_types=1);
 
 use Illuminate\Validation\ValidationException;
 use Wobqqq\Aegis\Aegis;
-use Wobqqq\Aegis\Settings\SettingsRepository;
 use Wobqqq\AegisIpBlocker\IpBlockerModule;
 use Wobqqq\AegisIpBlocker\IpBlockerSettings;
 
@@ -74,7 +73,7 @@ it('refuses invalid values', function (array $values, string $error): void {
     $errors = [];
 
     try {
-        resolve(SettingsRepository::class)->save(IpBlockerModule::KEY, $values + section([]));
+        Aegis::save(IpBlockerModule::KEY, $values + section([]));
     } catch (ValidationException $e) {
         $errors = $e->errors();
     }

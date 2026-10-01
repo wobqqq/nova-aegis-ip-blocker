@@ -49,10 +49,12 @@ The core and the module are separate packages that applications update independe
 
 - `Aegis::module(new IpBlockerModule(...))` and `Aegis::check(new ClientIpCheck(...))` in `boot()`;
 - `Aegis::settings('ip-blocker')` to read the section, merged over `defaults()` and cached by the core: the request path never queries the database;
+- `Aegis::save('ip-blocker', $values)` in the recovery commands, which validates with `rules()`, flushes the cache and dispatches `SettingsSaved`;
+- `Wobqqq\Aegis\Support\Values` for the typed reads in `IpBlockerSettings::fromArray()`;
 - `Wobqqq\Aegis\Events\SettingsSaved` to forget the memo when the section is saved;
 - `Module`, `Check`, `CheckResult`, `Field`, `Status`.
 
-The one exception is `Wobqqq\Aegis\Settings\SettingsRepository::save()`, which the recovery commands call because the core exposes no other way to write a section (validation, cache flush and `SettingsSaved` included). Keep it the only one; an architecture test forbids the core's internals (`AegisSetting`, `Support`, `Modules`, `Hardening`) and `DB`.
+The module requires core 1.1 (`Aegis::save()`, `Values`). An architecture test forbids the core's internals (`AegisSetting`, `SettingsRepository`, `Modules`, `Hardening`) and `DB`.
 
 A new core API is used only behind a check (`method_exists`, `class_exists`) with a fallback, so the module keeps working with every released core of the same major.
 

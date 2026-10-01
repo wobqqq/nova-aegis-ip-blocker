@@ -3,7 +3,7 @@
 declare(strict_types=1);
 
 use Illuminate\Http\Request;
-use Wobqqq\Aegis\Settings\SettingsRepository;
+use Wobqqq\Aegis\Aegis;
 use Wobqqq\AegisIpBlocker\IpBlockerModule;
 use Wobqqq\AegisIpBlocker\Tests\Fixtures\User;
 use Wobqqq\AegisIpBlocker\Tests\TestCase;
@@ -46,5 +46,5 @@ function block(array $ips, array $values = []): array
     app()->instance('request', Request::create('/'));
     $rows = array_map(static fn (string $ip): array => ['ip' => $ip, 'note' => null], $ips);
 
-    return resolve(SettingsRepository::class)->save(IpBlockerModule::KEY, $values + ['enabled' => true, 'view' => 'aegis-ip-blocker::blocked', 'ips' => $rows]);
+    return Aegis::save(IpBlockerModule::KEY, $values + ['enabled' => true, 'view' => 'aegis-ip-blocker::blocked', 'ips' => $rows]);
 }

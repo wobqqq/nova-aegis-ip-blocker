@@ -5,6 +5,7 @@ declare(strict_types=1);
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Log;
 use Wobqqq\Aegis\Settings\AegisSetting;
+use Wobqqq\Aegis\Settings\SettingsRepository;
 
 arch('every file declares strict types')
     ->expect('Wobqqq\AegisIpBlocker')
@@ -25,7 +26,7 @@ arch('value objects are immutable')
 
 arch('the module uses the core through its public API only')
     ->expect('Wobqqq\AegisIpBlocker')
-    ->not->toUse([AegisSetting::class, 'Wobqqq\Aegis\Support', 'Wobqqq\Aegis\Modules', 'Wobqqq\Aegis\Hardening', DB::class]);
+    ->not->toUse([AegisSetting::class, SettingsRepository::class, 'Wobqqq\Aegis\Modules', 'Wobqqq\Aegis\Hardening', DB::class]);
 
 arch('the visitor address is never read from a header by hand')
     ->expect('Wobqqq\AegisIpBlocker')
