@@ -20,6 +20,13 @@ body:
     validations:
       required: true
   - type: input
+    id: core-version
+    attributes:
+      label: Aegis core version
+      placeholder: 1.0.0
+    validations:
+      required: true
+  - type: input
     id: nova-version
     attributes:
       label: Laravel Nova version
