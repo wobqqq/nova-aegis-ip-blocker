@@ -36,11 +36,13 @@ No Nova license is needed: `laravel/nova` resolves to the test double in `stubs/
 | `src/IpBlockerSettings.php` | The section read again with safe fallbacks (`fromArray()`), into a `BlockList`. |
 | `src/BlockList.php` | Normalized addresses (a hash lookup) and subnets (`IpUtils::checkIp()`). |
 | `src/Support/IpAddress.php` | One spelling per address or subnet: IPv6 compressed and lowercase, IPv4-mapped as IPv4. |
-| `src/IpBlocker.php` | The per-process settings memo, the request decision, the administrator's address for the lock-out rule, the console actions. |
+| `src/IpBlocker.php` | The per-process settings memo and the request decision. |
+| `src/Administrator.php` | The administrator's address for the lock-out rule; `absent()` runs a save no administrator makes. |
+| `src/BlockListWriter.php` | The recovery commands' changes to the list. |
 | `src/Rules/` | `IpOrSubnet` (an entry is an address or a CIDR subnet) and `DoesNotBlockAdministrator` (the lock-out protection). |
 | `src/Http/Middleware/BlockListedIps.php` | The 403 answer, its page and its fallbacks. |
 | `src/Checks/ClientIpCheck.php` | Warns when forwarding headers arrive from a proxy that is not trusted. |
-| `src/Console/` | `aegis:ip-blocker:remove-ip` and `aegis:ip-blocker:disable`, the recovery path. |
+| `src/Console/` | `aegis:ip-blocker:remove-ip` and `aegis:ip-blocker:disable`, the recovery path: they parse the input and call `BlockListWriter`. |
 | `resources/lang/en/ip-blocker.php`, `resources/views/blocked.blade.php` | Every string (`aegis-ip-blocker::ip-blocker.*`) and the default 403 page. |
 | `stubs/nova/` | The Nova test double the suite and PHPStan run on (export-ignored), a copy of the core's. |
 
@@ -58,6 +60,20 @@ The core and the module are separate packages that applications update independe
 The module requires core 1.1 (`Aegis::save()`, `Values`). An architecture test forbids the core's internals (`AegisSetting`, `SettingsRepository`, `Modules`, `Hardening`) and `DB`.
 
 A new core API is used only behind a check (`method_exists`, `class_exists`) with a fallback, so the module keeps working with every released core of the same major.
+
+## Architecture
+
+The architecture skills in `.claude/skills/` are the rules for how code is shaped; read the one that matches the change before writing it:
+
+- `application-layer`: entry points (middleware, controllers, console commands, the module's Nova pieces) only translate input and output; the work sits in classes named after what they do, with typed input.
+- `dependency-injection`: collaborators and configuration arrive through the constructor; facades stay in entry points; interfaces only at I/O boundaries (HTTP, sockets, the clock, processes).
+- `error-handling`, `validation`: failures are typed exceptions, never `null` or `false`; input shape is validated at the entry point, business rules where the work is done.
+- `events`: reactions run after the commit, from events that say what happened.
+- `testing-architecture`: unit tests for pure logic, feature tests for use cases, fakes only at boundaries.
+- `domain-layer-cqrs`: when (rarely) a separate domain layer or read side pays off.
+- `package-boundaries`: what is public API here and how it may change.
+
+In this module: the middleware asks `IpBlocker` for a decision and nothing else; the recovery commands parse their input and call `BlockListWriter`; a save that has no administrator runs inside `Administrator::absent()` rather than behind a flag.
 
 ## Upgrading installed applications safely
 
