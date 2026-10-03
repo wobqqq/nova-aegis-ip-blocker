@@ -16,7 +16,7 @@ final readonly class IpBlockerModule implements Module
 {
     public const string KEY = 'ip-blocker';
 
-    public function __construct(private IpBlocker $blocker)
+    public function __construct(private Administrator $administrator)
     {
     }
 
@@ -54,7 +54,7 @@ final readonly class IpBlockerModule implements Module
         return [
             'enabled' => ['required', 'boolean'],
             'view' => ['required', 'string', 'max:100', 'regex:' . IpBlockerSettings::VIEW_PATTERN],
-            'ips' => ['present', 'array', 'max:' . IpBlockerSettings::MAX_ENTRIES, new DoesNotBlockAdministrator($this->blocker->administratorIp())],
+            'ips' => ['present', 'array', 'max:' . IpBlockerSettings::MAX_ENTRIES, new DoesNotBlockAdministrator($this->administrator->ip())],
             'ips.*' => ['array:ip,note'],
             'ips.*.ip' => ['nullable', 'string', 'max:100', new IpOrSubnet()],
             'ips.*.note' => ['nullable', 'string', 'max:255'],

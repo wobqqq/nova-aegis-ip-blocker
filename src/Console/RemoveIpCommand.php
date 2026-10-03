@@ -5,6 +5,7 @@ declare(strict_types=1);
 namespace Wobqqq\AegisIpBlocker\Console;
 
 use Illuminate\Console\Command;
+use Wobqqq\AegisIpBlocker\BlockListWriter;
 use Wobqqq\AegisIpBlocker\IpBlocker;
 use Wobqqq\AegisIpBlocker\Support\IpAddress;
 
@@ -16,7 +17,7 @@ final class RemoveIpCommand extends Command
     /** @var string */
     protected $description = 'Remove an address or a subnet from the IP Blocker list, for an administrator it locked out.';
 
-    public function handle(IpBlocker $blocker): int
+    public function handle(BlockListWriter $writer, IpBlocker $blocker): int
     {
         $argument = $this->argument('ip');
         $entry = IpAddress::entry(is_string($argument) ? $argument : null);
@@ -27,7 +28,7 @@ final class RemoveIpCommand extends Command
             return self::FAILURE;
         }
 
-        $removed = $blocker->remove($entry);
+        $removed = $writer->remove($entry);
 
         $removed > 0
             ? $this->components->info(sprintf('%s is no longer on the IP Blocker list.', $entry))
