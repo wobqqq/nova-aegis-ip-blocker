@@ -4,6 +4,10 @@ All notable changes are documented here. The format follows [Keep a Changelog](h
 
 ## [Unreleased]
 
+### Changed
+
+- Internal refactoring along the architecture skills, no change for applications: the recovery writes moved from `IpBlocker` to `BlockListWriter`, and `Administrator` replaces the flag that switched the lock-out rule off for the console.
+
 ## [1.1.0] - 2026-10-01
 
 ### Added

@@ -7,7 +7,7 @@ use Illuminate\Validation\ValidationException;
 use Wobqqq\Aegis\Aegis;
 use Wobqqq\Aegis\Settings\AegisSetting;
 use Wobqqq\Aegis\Settings\SettingsRepository;
-use Wobqqq\AegisIpBlocker\IpBlocker;
+use Wobqqq\AegisIpBlocker\BlockListWriter;
 use Wobqqq\AegisIpBlocker\IpBlockerModule;
 
 /**
@@ -81,6 +81,6 @@ it('keeps the lock-out rule for the next save from a request', function (): void
 it('removes nothing for what is not an address', function (): void {
     block(['203.0.113.7']);
 
-    expect(resolve(IpBlocker::class)->remove('nonsense'))->toBe(0)
+    expect(resolve(BlockListWriter::class)->remove('nonsense'))->toBe(0)
         ->and(listed())->toBe(['203.0.113.7']);
 });

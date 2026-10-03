@@ -5,7 +5,7 @@ declare(strict_types=1);
 namespace Wobqqq\AegisIpBlocker\Console;
 
 use Illuminate\Console\Command;
-use Wobqqq\AegisIpBlocker\IpBlocker;
+use Wobqqq\AegisIpBlocker\BlockListWriter;
 
 final class DisableCommand extends Command
 {
@@ -15,9 +15,9 @@ final class DisableCommand extends Command
     /** @var string */
     protected $description = 'Turn the IP Blocker off, for an administrator it locked out.';
 
-    public function handle(IpBlocker $blocker): int
+    public function handle(BlockListWriter $writer): int
     {
-        $blocker->disable();
+        $writer->disable();
 
         $this->components->info('IP Blocker is off.');
 

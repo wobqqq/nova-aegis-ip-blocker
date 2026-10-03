@@ -21,6 +21,7 @@ final class IpBlockerServiceProvider extends ServiceProvider
     public function register(): void
     {
         $this->app->singleton(IpBlocker::class);
+        $this->app->singleton(Administrator::class);
     }
 
     public function boot(Router $router, Dispatcher $events): void
